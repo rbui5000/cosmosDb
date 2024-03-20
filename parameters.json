@@ -15,7 +15,7 @@
             "value": "Core (SQL)"
         },
         "isZoneRedundant": {
-            "value": "true"
+            "value": "false"
         }
     }
 }
