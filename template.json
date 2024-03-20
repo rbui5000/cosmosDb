@@ -37,7 +37,7 @@
                         "id": "[concat(parameters('name'), '-', parameters('location'))]",
                         "failoverPriority": 0,
                         "locationName": "[parameters('locationName')]",
-                        "isZoneRedundant:" "[parameters('isZoneRedundant')]
+                        "isZoneRedundant": "[parameters('isZoneRedundant')]"
                     }
                 ],
                 "backupPolicy": {
