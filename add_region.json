@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "databaseAccounts_cosmosdatabaseafdev2_name": {
-            "defaultValue": "cosmosdatabaseafdev2",
+            "defaultValue": "test-cosmos-az3",
             "type": "String"
         }
     },
@@ -13,7 +13,7 @@
             "type": "Microsoft.DocumentDB/databaseAccounts",
             "apiVersion": "2023-11-15",
             "name": "[parameters('databaseAccounts_cosmosdatabaseafdev2_name')]",
-            "location": "East US",
+            "location": "Sweden Central",
             "tags": {
                 "defaultExperience": "Core (SQL)",
                 "hidden-cosmos-mmspecial": "",
@@ -49,7 +49,7 @@
                 },
                 "locations": [
                     {
-                        "locationName": "East US",
+                        "locationName": "Sweden Central",
                         "provisioningState": "Succeeded",
                         "failoverPriority": 0,
                         "isZoneRedundant": false
