@@ -2,8 +2,8 @@
     "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "databaseAccounts_test_cosmos_az_name": {
-            "defaultValue": "test-cosmos-az",
+        "databaseAccounts_cosmosdatabaseafdev2_name": {
+            "defaultValue": "cosmosdatabaseafdev2",
             "type": "String"
         }
     },
@@ -12,11 +12,12 @@
         {
             "type": "Microsoft.DocumentDB/databaseAccounts",
             "apiVersion": "2023-11-15",
-            "name": "[parameters('databaseAccounts_test_cosmos_az_name')]",
-            "location": "Sweden Central",
+            "name": "[parameters('databaseAccounts_cosmosdatabaseafdev2_name')]",
+            "location": "East US",
             "tags": {
                 "defaultExperience": "Core (SQL)",
-                "hidden-cosmos-mmspecial": ""
+                "hidden-cosmos-mmspecial": "",
+                "ResourceOwnerAlias": "skapila"
             },
             "kind": "GlobalDocumentDB",
             "identity": {
@@ -25,7 +26,7 @@
             "properties": {
                 "publicNetworkAccess": "Enabled",
                 "enableAutomaticFailover": false,
-                "enableMultipleWriteLocations": true,
+                "enableMultipleWriteLocations": false,
                 "isVirtualNetworkFilterEnabled": false,
                 "virtualNetworkRules": [],
                 "disableKeyBasedMetadataWriteAccess": false,
@@ -37,32 +38,69 @@
                 "databaseAccountOfferType": "Standard",
                 "defaultIdentity": "FirstPartyIdentity",
                 "networkAclBypass": "None",
-                "disableLocalAuth": false,
+                "disableLocalAuth": true,
                 "enablePartitionMerge": false,
                 "enableBurstCapacity": false,
-                "minimalTlsVersion": "Tls12",
+                "minimalTlsVersion": "Tls",
                 "consistencyPolicy": {
-                    "defaultConsistencyLevel": "Session",
+                    "defaultConsistencyLevel": "Strong",
                     "maxIntervalInSeconds": 5,
                     "maxStalenessPrefix": 100
                 },
                 "locations": [
                     {
-                        "locationName": "Sweden Central",
+                        "locationName": "East US",
                         "provisioningState": "Succeeded",
                         "failoverPriority": 0,
-                        "isZoneRedundant": false
-                    },
-                    {
-                        "locationName": "UK South",
-                        "provisioningState": "Succeeded",
-                        "failoverPriority": 1,
                         "isZoneRedundant": false
                     }
                 ],
                 "cors": [],
                 "capabilities": [],
-                "ipRules": [],
+                "ipRules": [
+                    {
+                        "ipAddressOrRange": "4.156.236.67"
+                    },
+                    {
+                        "ipAddressOrRange": "13.92.90.78"
+                    },
+                    {
+                        "ipAddressOrRange": "207.68.190.32/27"
+                    },
+                    {
+                        "ipAddressOrRange": "157.58.216.64/26"
+                    },
+                    {
+                        "ipAddressOrRange": "13.106.78.32/27"
+                    },
+                    {
+                        "ipAddressOrRange": "13.106.174.32/27"
+                    },
+                    {
+                        "ipAddressOrRange": "194.69.119.64/26"
+                    },
+                    {
+                        "ipAddressOrRange": "13.106.4.96/27"
+                    },
+                    {
+                        "ipAddressOrRange": "167.220.249.128/26"
+                    },
+                    {
+                        "ipAddressOrRange": "104.42.195.92"
+                    },
+                    {
+                        "ipAddressOrRange": "40.76.54.131"
+                    },
+                    {
+                        "ipAddressOrRange": "52.176.6.30"
+                    },
+                    {
+                        "ipAddressOrRange": "52.169.50.45"
+                    },
+                    {
+                        "ipAddressOrRange": "52.187.184.26"
+                    }
+                ],
                 "backupPolicy": {
                     "type": "Periodic",
                     "periodicModeProperties": {
@@ -76,17 +114,134 @@
             }
         },
         {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/AutoInstallDb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "AutoInstallDb"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/CollabSpacesDb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "CollabSpacesDb"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/InstallDb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "InstallDb"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/NotificationDb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "NotificationDb"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/ProvisioningRequests')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "ProvisioningRequests"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/SalesCopilotTenantSettingsDb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "SalesCopilotTenantSettingsDb"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesConnectionInfoDb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "VivaSalesConnectionInfoDb"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesLicenseBackfillInfoDb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "VivaSalesLicenseBackfillInfoDb"
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesTenantInfoDb')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "VivaSalesTenantInfoDb"
+                }
+            }
+        },
+        {
             "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
             "apiVersion": "2023-11-15",
-            "name": "[concat(parameters('databaseAccounts_test_cosmos_az_name'), '/00000000-0000-0000-0000-000000000001')]",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/00000000-0000-0000-0000-000000000001')]",
             "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_test_cosmos_az_name'))]"
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
             ],
             "properties": {
                 "roleName": "Cosmos DB Built-in Data Reader",
                 "type": "BuiltInRole",
                 "assignableScopes": [
-                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_test_cosmos_az_name'))]"
+                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
                 ],
                 "permissions": [
                     {
@@ -104,15 +259,15 @@
         {
             "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
             "apiVersion": "2023-11-15",
-            "name": "[concat(parameters('databaseAccounts_test_cosmos_az_name'), '/00000000-0000-0000-0000-000000000002')]",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/00000000-0000-0000-0000-000000000002')]",
             "dependsOn": [
-                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_test_cosmos_az_name'))]"
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
             ],
             "properties": {
                 "roleName": "Cosmos DB Built-in Data Contributor",
                 "type": "BuiltInRole",
                 "assignableScopes": [
-                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_test_cosmos_az_name'))]"
+                    "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
                 ],
                 "permissions": [
                     {
@@ -124,6 +279,684 @@
                         "notDataActions": []
                     }
                 ]
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/AutoInstallDb/AutoInstallStatus')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'AutoInstallDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "AutoInstallStatus",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/TenantId"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": [
+                            {
+                                "paths": [
+                                    "/UserId",
+                                    "/AppId"
+                                ]
+                            }
+                        ]
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/CollabSpacesDb/CollabSpaces')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'CollabSpacesDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "CollabSpaces",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [],
+                        "excludedPaths": [
+                            {
+                                "path": "/*"
+                            },
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/TenantId"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesConnectionInfoDb/ConnectionInfo')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesConnectionInfoDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "ConnectionInfo",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/TenantId/?"
+                            },
+                            {
+                                "path": "/Connections/[]/IsActive/?"
+                            },
+                            {
+                                "path": "/Connections/[]/Id/?"
+                            },
+                            {
+                                "path": "/Connections/[]/ConnectorId/?"
+                            },
+                            {
+                                "path": "/Connections/[]/CrmUserId/?"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/*"
+                            },
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/TenantId"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/InstallDb/InstallStatus')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'InstallDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "InstallStatus",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/TenantId/?"
+                            },
+                            {
+                                "path": "/OrgId/?"
+                            },
+                            {
+                                "path": "/InstallStatus/JobId/?"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/*"
+                            },
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/TenantId"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/NotificationDb/Notification')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'NotificationDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "Notification",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/requestId/?"
+                            },
+                            {
+                                "path": "/userId/?"
+                            },
+                            {
+                                "path": "/tenantId/?"
+                            },
+                            {
+                                "path": "/externalTemplateId/?"
+                            },
+                            {
+                                "path": "/notificationSendingPlatform/?"
+                            },
+                            {
+                                "path": "/notificationCategory/?"
+                            },
+                            {
+                                "path": "/state/?"
+                            },
+                            {
+                                "path": "/expirationDate/?"
+                            },
+                            {
+                                "path": "/scheduledTime/?"
+                            },
+                            {
+                                "path": "/locale/?"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/*"
+                            },
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/id"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "defaultTtl": 2592000,
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/ProvisioningRequests/requests')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'ProvisioningRequests')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "requests",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/id"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesTenantInfoDb/TenantInfo')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesTenantInfoDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "TenantInfo",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/id"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/SalesCopilotTenantSettingsDb/TenantSettings')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'SalesCopilotTenantSettingsDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "TenantSettings",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/settings/?"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/*"
+                            },
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/id"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesLicenseBackfillInfoDb/TenantsLicenses')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesLicenseBackfillInfoDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "TenantsLicenses",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/id"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesLicenseBackfillInfoDb/UsersLicenses')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesLicenseBackfillInfoDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "id": "UsersLicenses",
+                    "indexingPolicy": {
+                        "indexingMode": "consistent",
+                        "automatic": true,
+                        "includedPaths": [
+                            {
+                                "path": "/*"
+                            }
+                        ],
+                        "excludedPaths": [
+                            {
+                                "path": "/\"_etag\"/?"
+                            }
+                        ]
+                    },
+                    "partitionKey": {
+                        "paths": [
+                            "/tenantId"
+                        ],
+                        "kind": "Hash"
+                    },
+                    "uniqueKeyPolicy": {
+                        "uniqueKeys": []
+                    },
+                    "conflictResolutionPolicy": {
+                        "mode": "LastWriterWins",
+                        "conflictResolutionPath": "/_ts"
+                    },
+                    "computedProperties": []
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleAssignments",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/4e9ef385-ba96-48be-8398-47ff269f8c03')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '00000000-0000-0000-0000-000000000002')]"
+            ],
+            "properties": {
+                "roleDefinitionId": "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '00000000-0000-0000-0000-000000000002')]",
+                "principalId": "8e4d978c-9017-4e9d-9447-6d911c86a32e",
+                "scope": "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/AutoInstallDb/AutoInstallStatus/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'AutoInstallDb', 'AutoInstallStatus')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'AutoInstallDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/CollabSpacesDb/CollabSpaces/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'CollabSpacesDb', 'CollabSpaces')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'CollabSpacesDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/InstallDb/InstallStatus/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'InstallDb', 'InstallStatus')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'InstallDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/NotificationDb/Notification/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'NotificationDb', 'Notification')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'NotificationDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/ProvisioningRequests/requests/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'ProvisioningRequests', 'requests')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'ProvisioningRequests')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/SalesCopilotTenantSettingsDb/TenantSettings/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'SalesCopilotTenantSettingsDb', 'TenantSettings')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'SalesCopilotTenantSettingsDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesConnectionInfoDb/ConnectionInfo/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesConnectionInfoDb', 'ConnectionInfo')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesConnectionInfoDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesLicenseBackfillInfoDb/TenantsLicenses/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesLicenseBackfillInfoDb', 'TenantsLicenses')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesLicenseBackfillInfoDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesLicenseBackfillInfoDb/UsersLicenses/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesLicenseBackfillInfoDb', 'UsersLicenses')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesLicenseBackfillInfoDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
+            }
+        },
+        {
+            "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/throughputSettings",
+            "apiVersion": "2023-11-15",
+            "name": "[concat(parameters('databaseAccounts_cosmosdatabaseafdev2_name'), '/VivaSalesTenantInfoDb/TenantInfo/default')]",
+            "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesTenantInfoDb', 'TenantInfo')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('databaseAccounts_cosmosdatabaseafdev2_name'), 'VivaSalesTenantInfoDb')]",
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('databaseAccounts_cosmosdatabaseafdev2_name'))]"
+            ],
+            "properties": {
+                "resource": {
+                    "throughput": 100,
+                    "autoscaleSettings": {
+                        "maxThroughput": 1000
+                    }
+                }
             }
         }
     ]
