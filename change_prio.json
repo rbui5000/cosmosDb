@@ -58,6 +58,12 @@
                         "provisioningState": "Succeeded",
                         "failoverPriority": 0,
                         "isZoneRedundant": false
+                    },
+                    {
+                        "locationName": "East US",
+                        "provisioningState": "Succeeded",
+                        "failoverPriority": 2,
+                        "isZoneRedundant": false
                     }
                 ],
                 "cors": [],
